@@ -1,4 +1,4 @@
 # latex-docker
 
-Docker image for LaTeX, based on `sauerburger/pdflatex:2020plus` with additional 
-dependencies for `latexindent` and fixes for pdf-to-png conversion.
+Docker image for LaTeX projects based on ubuntu.
+Includes pdftk for watermarking PDFs.

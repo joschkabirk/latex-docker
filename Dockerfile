@@ -1,20 +1,34 @@
-FROM sauerburger/pdflatex:2020plus
+# Basic LaTeX Docker Image
+FROM ubuntu:26.04
 
-# Install vim
-RUN apt update && apt install -y vim
+# Install LaTeX
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    texlive-latex-base \
+    texlive-latex-recommended \
+    texlive-latex-extra \
+    texlive-fonts-recommended \
+    texlive-fonts-extra \
+    texlive-xetex \
+    texlive-lang-german \
+	texlive-extra-utils \
+    lmodern \
+    && rm -rf /var/lib/apt/lists/* 
 
-# Install requirements in order to make latexindent work
-RUN apt update && apt install -y perl
-RUN cpan -i App::cpanminus && \
-	cpanm YAML::Tiny && \
-	cpanm File::HomeDir && \
-	cpanm Unicode::GCString && \
-	cpanm Log::Log4perl && \
-	cpanm Log::Dispatch::File
+# Install utils
+# pdftk       : for watermarking
+# ghostscript : needed by pdftk
+RUN apt-get update && apt-get install -y --no-install-recommends \
+	wget \
+	curl \
+	vim \
+	unzip \
+	git \
+	ssh \ 
+	make \
+	zsh \
+	ghostscript \
+	pdftk \
+	&& rm -rf /var/lib/apt/lists/*
 
-# Install pdftk for watermark
-RUN apt update && apt install -y pdftk
-
-# Fix permissions of "convert" command
-# https://askubuntu.com/questions/1081895/trouble-with-batch-conversion-of-png-to-pdf-using-convert
-RUN echo '<policy domain="coder" rights="read|write" pattern="PDF" />' >> /etc/ImageMagick-6/policy.xml
+# Default command
+CMD ["pdflatex", "--version"]
