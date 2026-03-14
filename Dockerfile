@@ -1,34 +1,33 @@
 # Basic LaTeX Docker Image
-FROM ubuntu:26.04
+FROM texlive/texlive:latest
 
-# Install LaTeX
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    texlive-latex-base \
-    texlive-latex-recommended \
-    texlive-latex-extra \
-    texlive-fonts-recommended \
-    texlive-fonts-extra \
-    texlive-xetex \
-    texlive-lang-german \
-	texlive-extra-utils \
-    lmodern \
-    && rm -rf /var/lib/apt/lists/* 
-
-# Install utils
-# pdftk       : for watermarking
-# ghostscript : needed by pdftk
-RUN apt-get update && apt-get install -y --no-install-recommends \
-	wget \
-	curl \
-	vim \
-	unzip \
-	git \
-	ssh \ 
-	make \
-	zsh \
+RUN apt-get update && apt-get install -y \
+    git \
+    openssh-client \
+    zsh \
+    vim \
+    curl \
+    wget \
+    unzip \
+    tex-fmt \
+    python3 \
+    python3-numpy \
+    python3-scipy \
+    python3-matplotlib \
+    python3-ipykernel \
+    python3-h5py \
+    perl \
+    latexml \
+    imagemagick \
+    libimage-magick-perl \
+    pandoc \
 	ghostscript \
 	pdftk \
-	&& rm -rf /var/lib/apt/lists/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Oh-my-ZSH
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 
 # Default command
-CMD ["pdflatex", "--version"]
+CMD ["/bin/zsh"]
